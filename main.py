@@ -68,8 +68,8 @@ def mostrarArticulos(area):
 
     opcion1 = int(input("¿Los datos son correctos? \n1. Sí \n2. No \nIngrese una opcion: "))
     if opcion1 == 1:
-        if len(selected_articles) < 15:
-            selected_articles.append(opcion)  # Store the row number
+        if len(selected_articles) < 30:
+            selected_articles.append(opcion)  
             print("Articulo guardado exitosamente")
         else:
             print("No se pueden guardar más de 15 articulos")
@@ -92,6 +92,15 @@ def mostrarArticulosGuardados():
             print("-----------------")
     watts_consumidos = WattsConsumidos()
     print("WATTS CONSUMIDOS:", watts_consumidos)
+    if watts_consumidos <2000:
+        print ("SIGUE ASI ESTAS CONSUMIENDO POCA ENERGIA")
+    elif watts_consumidos>=2000 and watts_consumidos<7000:
+        print("TU CONSUMO DE ENERGIA ES MODERADO")
+    elif watts_consumidos>=7000 and watts_consumidos<10000:
+        print("PRECAUSION TU CONSUMO ES ALTO PODRIAS TENER UNA SOBRECARGA")
+    elif watts_consumidos>10000:
+        print("PELIGRO DE SOBRECARGA")
+
     input("Presione Enter para volver al menú...")
 
 def eliminarArticulo():
@@ -116,15 +125,18 @@ def WattsConsumidos():
     valores = obtenerValores()
     if not valores:
         return 0
+
+
     eng = matlab.engine.start_matlab()
-    matlab_valores = matlab.double(valores)
+    matlab_valores = matlab.double(valores, is_complex=False)
     resultado = eng.GraficaSuma(matlab_valores)
-    eng.plot_data(valores, nargout=0)
 
-    input("Presiona Enter para cerrar la gráfica y terminar el programa")
-
+    eng.plot_data(matlab_valores, nargout=0)
+    input ("Presiona una tecla para salir de la grafica")
     eng.quit()
     return resultado
+
+
 
 def obtenerValores():
     valores = []
@@ -166,4 +178,3 @@ def menu():
             input("Presione Enter para volver al menú...")
 
 menu()
-
